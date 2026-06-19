@@ -468,6 +468,7 @@ if st.button("Submit", type="primary"):
         row = {
             "submitted_at": datetime.now().isoformat(timespec="seconds"),
             "who_runnin_sit": who_runnin_sit,
+			"credit_sit_who": credit_sit_who,
             "which_sit": which_sit,
             "selected_sits": join_items(selected_sits),
 
