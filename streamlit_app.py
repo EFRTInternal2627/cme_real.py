@@ -419,7 +419,7 @@ else:
 completed_by_section: dict[str, list[str]] = {}
 missed_by_section: dict[str, list[str]] = {}
 
-combined_sections = combowombo(selected_sits)
+combined_sections = combine_must_sees(selected_sits)
 
 for section_name, items in combined_sections.items():
     st.divider()
@@ -458,7 +458,7 @@ if st.button("Submit", type="primary"):
     if not who_runnin_sit:
         st.error("Please choose who runnin da sit.")
 
-    elif not selected_emergencies:
+    elif not selected_sits:
         st.error("Please choose at least one sit type.")
 
     elif not goal:
@@ -469,7 +469,7 @@ if st.button("Submit", type="primary"):
             "submitted_at": datetime.now().isoformat(timespec="seconds"),
             "who_runnin_sit": who_runnin_sit,
             "which_sit": which_sit,
-            "selected_emergencies": join_items(selected_emergencies),
+            "selected_sits": join_items(selected_sits),
 
             "assessment_completed": join_items(
                 completed_by_section.get("Assessment MUST-SEES", [])
@@ -492,16 +492,16 @@ if st.button("Submit", type="primary"):
         }
 
         save_submission(row)
+        try:
+            send_to_google_sheet(row)
+            st.success("Submitted! Your CME is saved!.")
 
-try:
-    send_to_google_sheet(row)
-    st.success("Submitted! Saved locally and sent to Google Sheets.")
-except Exception as error:
-    st.warning(
-        "Submitted and saved locally, but Google Sheets did not update. "
-        "Check your Apps Script Web App URL and deployment settings."
-    )
-    st.write(error)
+        except Exception as error:
+            st.warning(
+                "Not saved to google sheet EEK shoot training a quick text. "
+            )
+            st.write(error)
 
-        st.write("Here is what was saved shayla:")
+        st.write("Here is what was saved:")
         st.dataframe([row], use_container_width=True)
+
