@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import streamlit as st # the website we using for the cme submissions
-GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyqMh_n9u7RW38YV3054A6i5GY8M2bopiYgc4vfEsFRh-2gKjHLtDI6P8XiqL6BFpDn/exec"
+GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyQm7r14cXNBpzqfGXPOKulPcVtoTzjw9THuWE0Oq_dPEiuFVgj-vM98OrS5285xVWV/exec"
 SUBMISSIONS_FILE = Path("cme_submissions.csv")
 
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
