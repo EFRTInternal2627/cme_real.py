@@ -1,11 +1,11 @@
 from __future__ import annotations
-
+import requests
 import csv
 from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
-
+GOOGLE_SHEET_WEB_APP_URL = https://script.google.com/macros/s/AKfycbyqMh_n9u7RW38YV3054A6i5GY8M2bopiYgc4vfEsFRh-2gKjHLtDI6P8XiqL6BFpDn/exec
 SUBMISSIONS_FILE = Path("cme_submissions.csv")
 
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
@@ -371,7 +371,13 @@ def join_items(items: list[str]) -> str:
 
 
 # Streamlit app starts here. thank you youtube. thank you reddit. thank you google.
-
+def send_to_google_sheet(row: dict[str, str]) -> None:
+    response = requests.post(
+        GOOGLE_SHEET_WEB_APP_URL,
+        json=row,
+        timeout=10,
+    )
+    response.raise_for_status()
 st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe
@@ -487,7 +493,15 @@ if st.button("Submit", type="primary"):
 
         save_submission(row)
 
-        st.success(f"Submitted! Saved to {SUBMISSIONS_FILE.name}")
+try:
+    send_to_google_sheet(row)
+    st.success("Submitted! Saved locally and sent to Google Sheets.")
+except Exception as error:
+    st.warning(
+        "Submitted and saved locally, but Google Sheets did not update. "
+        "Check your Apps Script Web App URL and deployment settings."
+    )
+    st.write(error)
 
         st.write("Here is what was saved shayla:")
         st.dataframe([row], use_container_width=True)
