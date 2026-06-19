@@ -248,44 +248,80 @@ MUST_SEES = {
 }
 
 
-def remove_dup(items: list[str]) -> list[str]:
+def clean_item_name(item: str) -> str:
+    """
+    Makes duplicate checking more forgiving.
+    Example:
+    - SpO2%
+    - SpO2
+    will be treated as the same thing.
+    """
+    cleaned = item.lower().strip()
+    cleaned = cleaned.replace("spo2%", "spo2")
+    cleaned = cleaned.replace("sp02", "spo2")
+    cleaned = " ".join(cleaned.split())
+    return cleaned
 
-# so this is to remove dups in da must-sees if people click combinations
-# this took a very long time... too long...
 
+def clean_section_name(section_name: str) -> str:
+    """
+    Forces similar section names to merge together.
+    Example:
+    - Airway Vital MUST-SEES
+    - Breathing Vital MUST-SEES
+    - Vital MUST-SEES
+    all become Vital MUST-SEES.
+    """
+    lower_name = section_name.lower()
+
+    if "vital" in lower_name:
+        return "Vital MUST-SEES"
+
+    if "assessment" in lower_name:
+        return "Assessment MUST-SEES"
+
+    return section_name
+
+
+def ordered_unique(items: list[str]) -> list[str]:
+    """
+    Remove duplicate items while keeping the original order.
+    """
     seen = set()
     result = []
 
     for item in items:
-        if item not in seen:
+        cleaned = clean_item_name(item)
+
+        if cleaned not in seen:
             result.append(item)
-            seen.add(item)
+            seen.add(cleaned)
 
     return result
 
-def combowombo(selected_sits: list[str]) -> dict[str, list[str]]:
-    """
-    so this here combines the must-sees from all sit categories
 
-    Example:
-    If the user selects Airway + Breathing, we should get both must-sees muahaha
+def combine_must_sees(selected_emergencies: list[str]) -> dict[str, list[str]]:
+    """
+    Combines must-sees from multiple emergencies.
+    Also merges vitals together and removes duplicates.
     """
     combined: dict[str, list[str]] = {}
 
-    for sit in selected_sits:
-        for section_name, items in MUST_SEES[sit].items():
-            if section_name not in combined:
-                combined[section_name] = []
+    for emergency in selected_emergencies:
+        for section_name, items in MUST_SEES[emergency].items():
+            cleaned_section = clean_section_name(section_name)
 
-            combined[section_name].extend(items)
+            if cleaned_section not in combined:
+                combined[cleaned_section] = []
 
-    cleaned_combined = {}
+            combined[cleaned_section].extend(items)
+
+    final_combined = {}
 
     for section_name, items in combined.items():
-        cleaned_combined[section_name] = remove_dup(items)
+        final_combined[section_name] = ordered_unique(items)
 
-    return cleaned_combined
-
+    return final_combined
 
 def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[str]]:
     """
