@@ -1,30 +1,32 @@
 from __future__ import annotations
 import requests # this is how google sheets is connected frfr
-import csv
-from datetime import datetime
+import csv # this is how we import each submission
+from datetime import datetime # tracks the time someone submits a CME so we can see
 from pathlib import Path
 
 import streamlit as st # the website we using for the cme submissions
 GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyQm7r14cXNBpzqfGXPOKulPcVtoTzjw9THuWE0Oq_dPEiuFVgj-vM98OrS5285xVWV/exec"
 SUBMISSIONS_FILE = Path("cme_submissions.csv")
-
+# these are the lists that contain all of us as strings (so you can choose dif people for sits)
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
-
+# i should put these in alphabetical order but i am a lazy chud
 CREDIT_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
 
-SIT_OPTIONS = ["MCME#1", "MCME#2", "MCME#3", "THCME"]
-
+SIT_OPTIONS = ["MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
+#this is something i think is really important! having a clear goal means better quality cmes
+# it also means people won't submit unless they're sure the responders improved/learned something from da sit! i hope!
 GOAL_OPTIONS = [
     "yes! sit was understood, no further action needed.",
     "we practiced LOQ, then the sit was understood!",
     "we practiced some vitals, then the sit was understood!",
     "we did a stop-and-go sit, then the sit was understood!",
 ]
-
-MUST_SEES = {
-    "Airway Emergency": {
-        "Assessment MUST-SEES": [
+# i will fill these out properly with protocol once code and google sheets are finalized tee hee
+# here are the dictionaries! lowkey dictionary inside of dictionary inside of dictionary inside of
+MUST_SEES = { #this is dictionary 1
+    "Airway Emergency": { # dict 2
+        "Assessment MUST-SEES": [ #dict 3 lawd  have mercy
             "Primary Assessment (EMCAP + LOC + ACBC)",
             "Determine Airway obstruction",
             "Transport Decision (Stay & Play? or Load and Go?)",
@@ -249,14 +251,8 @@ MUST_SEES = {
 
 
 def clean_item_name(item: str) -> str:
-    """
-    Makes duplicate checking more forgiving.
-    Example:
-    - SpO2%
-    - SpO2
-    will be treated as the same thing.
-    """
-    cleaned = item.lower().strip()
+   # this can be used to clean up the grammar in the must-sees (lowkey giving me a headache i might get rid of this because it's merging the wrong stuff)
+    cleaned = item.lower().strip() #basically makes everything either lowercase or properly capitalized 
     cleaned = cleaned.replace("spo2%", "spo2")
     cleaned = cleaned.replace("sp02", "spo2")
     cleaned = " ".join(cleaned.split())
@@ -264,14 +260,7 @@ def clean_item_name(item: str) -> str:
 
 
 def clean_section_name(section_name: str) -> str:
-    """
-    Forces similar section names to merge together.
-    Example:
-    - Airway Vital MUST-SEES
-    - Breathing Vital MUST-SEES
-    - Vital MUST-SEES
-    all become Vital MUST-SEES.
-    """
+# so this basically is merging the yap that is similar in the must-sees, also giving me a big fat headache
     lower_name = section_name.lower()
 
     if "vital" in lower_name:
@@ -284,9 +273,7 @@ def clean_section_name(section_name: str) -> str:
 
 
 def ordered_unique(items: list[str]) -> list[str]:
-    """
-    Remove duplicate items while keeping the original order.
-    """
+    # this  will remove duplicate items while keeping the original order.
     seen = set()
     result = []
 
@@ -300,12 +287,10 @@ def ordered_unique(items: list[str]) -> list[str]:
     return result
 
 
-def combine_must_sees(selected_emergencies: list[str]) -> dict[str, list[str]]:
-    """
-    Combines must-sees from multiple emergencies.
-    Also merges vitals together and removes duplicates.
-    """
-    combined: dict[str, list[str]] = {}
+def combine_must_sees(selected_emergencies: list[str]) -> dict[str, list[str]]: # CORE MERGING SECTION THE BIG KAHUNA
+    # Combines must-sees from multiple emergencies when chosen in a dropdown menu (and also keeps the order?) i hope so!
+    # Also merges vitals together and removes duplicates because that wasn't working for a while lmao
+    combined: dict[str, list[str]] = {} # this is the empty dictionary that stuff will go in oh ya!
 
     for emergency in selected_emergencies:
         for section_name, items in MUST_SEES[emergency].items():
@@ -324,12 +309,9 @@ def combine_must_sees(selected_emergencies: list[str]) -> dict[str, list[str]]:
     return final_combined
 
 def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[str]]:
-    """
-    Display a checklist.
-    Returns:
-    - completed items
-    - missed items
-    """
+
+    #Display a checklist of actual must-sees, and will return completed and missed items in the google doc
+
     st.markdown(f"### {section_name}")
     st.caption("Check the items the responder completed.")
 
@@ -337,7 +319,7 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 
     for item in items:
         key = f"{section_name}::{item}"
-
+# fun fact an f string lets you convert variables into text, so it'll basically throw whatever assessment chosen into the text!
         if st.checkbox(item, key=key):
             completed.append(item)
 
@@ -353,15 +335,16 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 def save_submission(row: dict[str, str]) -> None:
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
-  
+# row is the name of the dictionary for the submissions btw 
+	# keys will be the headers and then the values will be inputed as data woo woo
     file_exists = SUBMISSIONS_FILE.exists()
-
+# this checks if the CSV file already exists, if not...
     with SUBMISSIONS_FILE.open("a", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(row.keys()))
-
+# it writes one here,
         if not file_exists:
             writer.writeheader()
-
+# and then saves it in here
         writer.writerow(row)
 
 
@@ -370,7 +353,7 @@ def join_items(items: list[str]) -> str:
     return "; ".join(items)
 
 
-# Streamlit app starts here. thank you youtube. thank you reddit. thank you google.
+# Streamlit app  to google sheets stuff. thank you youtube. thank you reddit. thank you google.
 def send_to_google_sheet(row: dict[str, str]) -> None:
     response = requests.post(
         GOOGLE_SHEET_WEB_APP_URL,
@@ -380,14 +363,14 @@ def send_to_google_sheet(row: dict[str, str]) -> None:
     response.raise_for_status()
 st.set_page_config(
     page_title="CME Submission Form (26'/27')",
-    page_icon="🚑", #ehehehehe
+    page_icon="🚑", #ehehehehe got to be swagged up
 )
 
 st.title("cme submission form")
 
 st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training).")
 
-st.subheader("happy training everyone!")
+st.subheader("happy training everyone! #nocarryovers")
 
 who_runnin_sit = st.selectbox(
     "who runnin dis sit *",
