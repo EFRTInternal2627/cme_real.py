@@ -340,16 +340,6 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
     return completed, missed
 
 
-who_runnin_sit = st.selectbox(
-    "who runnin sit *",
-    [""] + sorted(RUNNING_SIT_WHO, key=str.casefold)
-)
-
-credit_sit_who = st.selectbox(
-    "Who is getting CME credit? *",
-    [""] + sorted(CREDIT_SIT_WHO, key=str.casefold)
-)
-# i am no longer a lazy chud this should fix the alphabetical order 
 
 def save_submission(row: dict[str, str]) -> None:
   
@@ -390,6 +380,17 @@ st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe got to be swagged up
 )
+who_runnin_sit = st.selectbox(
+    "who runnin sit *",
+    [""] + sorted(RUNNING_SIT_WHO, key=str.casefold)
+)
+
+credit_sit_who = st.selectbox(
+    "Who is getting CME credit? *",
+    [""] + sorted(CREDIT_SIT_WHO, key=str.casefold)
+)
+# i am no longer a lazy chud this should fix the alphabetical order 
+
 def prepare_uploaded_files(uploaded_files):
     prepared_files = []
 
