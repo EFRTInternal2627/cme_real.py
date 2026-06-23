@@ -12,7 +12,6 @@ RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", 
 # i should put these in alphabetical order but i am a lazy chud
 CREDIT_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
-
 SIT_OPTIONS = ["MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
 #this is something i think is really important! having a clear goal means better quality cmes
 # it also means people won't submit unless they're sure the responders improved/learned something from da sit! i hope!
@@ -109,7 +108,8 @@ MUST_SEES = { #this is dictionary 1
      "Syncope Emergencies": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "Full Syncope LOQ",
             "Lifestyle LOQ",
@@ -131,7 +131,8 @@ MUST_SEES = { #this is dictionary 1
     "Diabetic Emergencies": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "Consideration of glucose tablets/Administration if necessary",
             "Transfer Pad with USEFUL STUFF ON IT",
@@ -169,7 +170,8 @@ MUST_SEES = { #this is dictionary 1
      "Alcohol/Drug (Intox) Emergencies": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "Full Intox LOQ",
             "Consideration of vomit/patent airway",
@@ -191,7 +193,8 @@ MUST_SEES = { #this is dictionary 1
       "Musculoskeletal Emergencies": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "Full CHOPS Assessment",
             "Immobilization of injured region if possible",
@@ -209,7 +212,8 @@ MUST_SEES = { #this is dictionary 1
     "Soft-Tissue Injuries/Burns": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "Localized Exam to site of injury",
             "Cleaning and bandaging of injury",
@@ -229,7 +233,8 @@ MUST_SEES = { #this is dictionary 1
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
             "Identified Primary Assessment Compromise (ie. No pulse, <8 RR, etc.)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Responder(s) and Pack(s) positioning",
             "Full Don Consideration",
             "Treat Pt for shock (O2)",
             "Adequate preparation of equipment for Pt decomp",
@@ -308,6 +313,8 @@ def combine_must_sees(selected_emergencies: list[str]) -> dict[str, list[str]]: 
 
     return final_combined
 
+
+
 def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[str]]:
 
     #Display a checklist of actual must-sees, and will return completed and missed items in the google doc
@@ -331,6 +338,17 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 
     return completed, missed
 
+
+who_runnin_sit = st.selectbox(
+    "who runnin sit *",
+    [""] + sorted(RUNNING_SIT_WHO, key=str.casefold)
+)
+
+credit_sit_who = st.selectbox(
+    "Who is getting CME credit? *",
+    [""] + sorted(CREDIT_SIT_WHO, key=str.casefold)
+)
+# i am no longer a lazy chud this should fix the alphabetical order 
 
 def save_submission(row: dict[str, str]) -> None:
   
