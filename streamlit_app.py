@@ -5,14 +5,15 @@ from datetime import datetime # tracks the time someone submits a CME so we can 
 from pathlib import Path
 
 import streamlit as st # the website we using for the cme submissions
-GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyQm7r14cXNBpzqfGXPOKulPcVtoTzjw9THuWE0Oq_dPEiuFVgj-vM98OrS5285xVWV/exec"
+import base64 # dis is how we upload photos and pdfs for THCME!
+GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2_XU8NUUDZ0ALNhQ_UcXqR8hSunltU8P2W7K1wI5H0WYIeWiZZW9YRVRpaKJJMzk/exec"
 SUBMISSIONS_FILE = Path("cme_submissions.csv")
 # these are the lists that contain all of us as strings (so you can choose dif people for sits)
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 # i should put these in alphabetical order but i am a lazy chud
 CREDIT_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
-SIT_OPTIONS = ["MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
+SIT_OPTIONS = ["OCME", "MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
 #this is something i think is really important! having a clear goal means better quality cmes
 # it also means people won't submit unless they're sure the responders improved/learned something from da sit! i hope!
 GOAL_OPTIONS = [
@@ -372,18 +373,37 @@ def join_items(items: list[str]) -> str:
 
 
 # Streamlit app  to google sheets stuff. thank you youtube. thank you reddit. thank you google.
-def send_to_google_sheet(row: dict[str, str]) -> None:
+def send_to_google_sheet(row: dict[str, str], uploaded_files_data=None) -> None:
+    payload = {
+        "row": row,
+        "files": uploaded_files_data or [],
+    }
+
     response = requests.post(
         GOOGLE_SHEET_WEB_APP_URL,
-        json=row,
-        timeout=10,
+        json=payload,
+        timeout=30,
     )
+
     response.raise_for_status()
 st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe got to be swagged up
 )
+def prepare_uploaded_files(uploaded_files):
+    prepared_files = []
 
+    for uploaded_file in uploaded_files:
+        file_bytes = uploaded_file.getvalue()
+
+        prepared_files.append({
+            "name": uploaded_file.name,
+            "type": uploaded_file.type or "application/octet-stream",
+            "content": base64.b64encode(file_bytes).decode("utf-8"),
+        })
+
+    return prepared_files
+	
 st.title("cme submission form")
 
 st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training).")
@@ -454,7 +474,12 @@ general_feedback = st.text_area(
     "general feedback for your responder!"
 )
 
-
+uploaded_files = st.file_uploader(
+    "Upload supporting files, if needed",
+    type=["jpg", "jpeg", "png", "pdf", "doc", "docx"],
+    accept_multiple_files=True,
+    help="Accepted files: JPEG, PNG, PDF, DOC, DOCX, try anoda one fam"
+)
 if st.button("Submit", type="primary"):
     if not who_runnin_sit:
         st.error("Please choose who runnin da sit.")
@@ -472,6 +497,8 @@ if st.button("Submit", type="primary"):
 			"credit_sit_who": credit_sit_who,
             "which_sit": which_sit,
             "selected_sits": join_items(selected_sits),
+			"uploaded_file_names": join_items([file["name"] for file in uploaded_files_data]),
+      		"uploaded_file_count": str(len(uploaded_files_data)),
 
             "assessment_completed": join_items(
                 completed_by_section.get("Assessment MUST-SEES", [])
@@ -493,9 +520,10 @@ if st.button("Submit", type="primary"):
             "general_feedback": general_feedback,
         }
 
+
         save_submission(row)
         try:
-            send_to_google_sheet(row)
+            send_to_google_sheet(row, uploaded_files_data)
             st.success("Submitted! Your CME is saved!.")
 
         except Exception as error:
