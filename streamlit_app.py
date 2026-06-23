@@ -410,16 +410,6 @@ st.caption ("Each month, each responder is required to complete the CMEs outline
 
 st.subheader("happy training everyone! #nocarryovers")
 
-who_runnin_sit = st.selectbox(
-    "who runnin dis sit *",
-    [""] + RUNNING_SIT_WHO,
-)
-
-credit_sit_who = st.multiselect(
-    "who is recieving credit for this sit? *",
-    list(RUNNING_SIT_WHO),
-    help="choose one or more responders!",
-)
 which_sit = st.selectbox(
     "which CME are you completing?",
     [""] + SIT_OPTIONS,
