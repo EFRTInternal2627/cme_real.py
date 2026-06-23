@@ -475,10 +475,10 @@ general_feedback = st.text_area(
 )
 
 uploaded_files = st.file_uploader(
-    "Upload supporting files, if needed",
+    "If suhani and jen said to submit a photo of something, it probably goes here",
     type=["jpg", "jpeg", "png", "pdf", "doc", "docx"],
     accept_multiple_files=True,
-    help="Accepted files: JPEG, PNG, PDF, DOC, DOCX, try anoda one fam"
+    help="Accepted files: JPEG, PNG, PDF, DOC, DOCX, idk what other files you got bruv"
 )
 if st.button("Submit", type="primary"):
     if not who_runnin_sit:
