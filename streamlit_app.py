@@ -483,6 +483,7 @@ if st.button("Submit", type="primary"):
 
     else:
 		uploaded_files_data = prepare_uploaded_files(uploaded_files)
+	
         row = {
             "submitted_at": datetime.now().isoformat(timespec="seconds"),
             "who_runnin_sit": who_runnin_sit,
