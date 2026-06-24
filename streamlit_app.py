@@ -491,6 +491,7 @@ if st.button("Submit", type="primary"):
             "selected_sits": join_items(selected_sits),
 			"uploaded_file_names": join_items([file["name"] for file in uploaded_files_data]),
    			"uploaded_file_count": str(len(uploaded_files_data)),
+			
 
             "assessment_completed": join_items(
                 completed_by_section.get("Assessment MUST-SEES", [])
