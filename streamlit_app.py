@@ -482,6 +482,7 @@ if st.button("Submit", type="primary"):
         st.error("where??? is yo goal???")
 
     else:
+		uploaded_files_data = prepare_uploaded_files(uploaded_files)
         row = {
             "submitted_at": datetime.now().isoformat(timespec="seconds"),
             "who_runnin_sit": who_runnin_sit,
@@ -489,7 +490,7 @@ if st.button("Submit", type="primary"):
             "which_sit": which_sit,
             "selected_sits": join_items(selected_sits),
 			"uploaded_file_names": join_items([file["name"] for file in uploaded_files_data]),
-      		"uploaded_file_count": str(len(uploaded_files_data)),
+   			"uploaded_file_count": str(len(uploaded_files_data)),
 
             "assessment_completed": join_items(
                 completed_by_section.get("Assessment MUST-SEES", [])
