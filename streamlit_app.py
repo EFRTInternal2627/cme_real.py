@@ -22,11 +22,20 @@ GOAL_OPTIONS = [
     "we practiced some vitals, then the sit was understood!",
     "we did a stop-and-go sit, then the sit was understood!",
 ]
+
+PACK_CHECK_OPTIONS = [
+	"All Vitals Kits (BP Cuff, Penlight, BGL Kit, Sp02)",
+	"All Sx Relief",
+	"BLS Equipment (AED, BVM, Pocket Masks, Adjuncts)",
+	"Shock Equipment (Oxygen + Tubing, Blanket)",
+	"MSK stuff",
+]
+	
 # i will fill these out properly with protocol once code and google sheets are finalized tee hee
 # here are the dictionaries! lowkey dictionary inside of dictionary inside of dictionary inside of
 MUST_SEES = { #this is dictionary 1
-    "Airway Emergency": { # dict 2
-        "Assessment MUST-SEES": [ #dict 3 lawd  have mercy
+    "Airway Emergency": { # dict 2 to specify each kind of sit we evalin
+        "Assessment MUST-SEES": [ #now we have a list of the must-sees
             "Primary Assessment (EMCAP + LOC + ACBC)",
             "Determine Airway obstruction",
             "Transport Decision (Stay & Play? or Load and Go?)",
@@ -380,6 +389,10 @@ st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe got to be swagged up
 )
+st.image(
+    "header.png",
+    use_container_width=True
+)
 
 def prepare_uploaded_files(uploaded_files):
     prepared_files = []
@@ -460,6 +473,10 @@ goal = st.radio(
     index=None,
 )
 
+pack_check = st.multiselect(
+	"We want to keep these packs in good shape! Make sure all of the following are functional and in your pack, if not pls let an exec know to restock tysm :)",
+	list(PACK_CHECK_OPTIONS.keys()),
+)
 
 general_feedback = st.text_area(
     "general feedback for your responder!"
