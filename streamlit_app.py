@@ -475,7 +475,7 @@ goal = st.radio(
 
 pack_check = st.multiselect(
 	"We want to keep these packs in good shape! Make sure all of the following are functional and in your pack, if not pls let an exec know to restock tysm :)",
-	list(PACK_CHECK_OPTIONS.keys()),
+	PACK_CHECK_OPTIONS
 )
 
 general_feedback = st.text_area(
