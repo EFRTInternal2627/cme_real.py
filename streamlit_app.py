@@ -473,7 +473,7 @@ goal = st.radio(
     index=None,
 )
 
-pack_check = st.multiselect(
+pack_check = st.selectbox(
 	"We want to keep these packs in good shape! Make sure all of the following are functional and in your pack, if not pls let an exec know to restock tysm :)",
 	PACK_CHECK_OPTIONS
 )
