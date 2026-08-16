@@ -1,25 +1,31 @@
 from __future__ import annotations
-
-import csv
+import requests
+from uuid import uuid4
 from datetime import datetime
-from pathlib import Path
+
 
 import streamlit as st
-
-SUBMISSIONS_FILE = Path("cme_submissions.csv")
 
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
 CREDIT_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
-
-SIT_OPTIONS = ["MCME#1", "MCME#2", "MCME#3", "THCME"]
+SIT_OPTIONS = ["Optional/Skills CME", "MCME#1", "MCME#2", "MCME#3", "MCME#4", "Take-Home CME"]
 
 GOAL_OPTIONS = [
     "yes! sit was understood, no further action needed.",
     "we practiced LOQ, then the sit was understood!",
     "we practiced some vitals, then the sit was understood!",
     "we did a stop-and-go sit, then the sit was understood!",
+]
+
+PACK_CHECK = [
+    "all vitals equipment",
+    "msk + soft tissue equipment + yellow blanket",
+    "BLS equipment (AED, BVM, pocket mask, you get the gist)",
+    "all sx relief + all checklist sheets have been wiped!",
+	"airway stuff equipment (suction, adjuncts, oxygen and all the tubing lol)",
+	"transfer pad!"
 ]
 
 MUST_SEES = {
@@ -317,22 +323,85 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 def save_submission(row: dict[str, str]) -> None:
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
-  
-    file_exists = SUBMISSIONS_FILE.exists()
+##UPDATE! No longer using CSV file that is silly. will be using google sheets again lol
+  # this is how we will do that actually
+def save_submission_to_google():
 
-    with SUBMISSIONS_FILE.open("a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(row.keys()))
+    payload = {
+        "secret": st.secrets["cme_secret"], 
+#lol the secret is an id thats a part of the google scripts code inside of the spreadsheet dont fear dear shayla
+        "submission_id": str(uuid4()),
 
-        if not file_exists:
-            writer.writeheader()
+        "who_runnin_sit": who_runnin_sit,
 
-        writer.writerow(row)
+        "credit_sit_who": credit_sit_who,
 
+        "which_sit": which_sit,
+
+        "selected_sits": selected_sits,
+
+        "completed_must_sees":
+            flatten_sections(
+                completed_by_section
+            ),
+
+        "missed_must_sees":
+            flatten_sections(
+                missed_by_section
+            ),
+
+        "additional_must_sees":
+            additional_must_sees,
+
+        "goal1":
+            goal1,
+
+        "goal":
+            goal or "",
+
+        "general_feedback":
+            general_feedback,
+    }
+
+
+    response = requests.post(
+        st.secrets["google_script_url"],
+        json=payload,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    result = response.json()
+
+
+    if not result.get("ok"):
+        raise RuntimeError(
+            result.get(
+                "error",
+                "Unknown Google Sheets error"
+            )
+        )
+
+    return result
 
 def join_items(items: list[str]) -> str:
 #
     return "; ".join(items)
+def flatten_sections(
+    sections: dict[str, list[str]]
+) -> str:
 
+    output = []
+
+    for section_name, items in sections.items():
+
+        for item in items:
+            output.append(
+                f"{section_name}: {item}"
+            )
+
+    return "; ".join(output)
 
 # Streamlit app starts here. thank you youtube. thank you reddit. thank you google.
 
@@ -411,47 +480,58 @@ general_feedback = st.text_area(
     "general feedback for your responder!"
 )
 
+suhanipackcheck = st.radio(
+	"Please make sure stuff in pack is put back nicely! Suhani will haunt you and your children if you don't.",
+	PACK_CHECK,
+	index=None,
+)
 
-if st.button("Submit", type="primary"):
+######### OKAY AFTER THEY CLICK SUBMIT WHAT HAPPENS NEXT IS BELOW
+if st.button("submit cme 🚑"):
+
     if not who_runnin_sit:
-        st.error("Please choose who runnin da sit.")
+        st.error(
+            "pls choose who ran the sit!"
+        )
 
-    elif not selected_emergencies:
-        st.error("Please choose at least one sit type.")
+    elif not credit_sit_who:
+        st.error(
+            "pls choose who gets credit!"
+        )
 
-    elif not goal:
-        st.error("where??? is yo goal???")
+    elif not which_sit:
+        st.error(
+            "pls choose which CME this is!"
+        )
+
+    elif not selected_sits:
+        st.error(
+            "pls choose at least one emergency type!"
+        )
+
+    elif goal is None:
+        st.error(
+            "pls answer whether the goal was achieved!"
+        )
 
     else:
-        row = {
-            "submitted_at": datetime.now().isoformat(timespec="seconds"),
-            "who_runnin_sit": who_runnin_sit,
-            "which_sit": which_sit,
-            "selected_emergencies": join_items(selected_emergencies),
 
-            "assessment_completed": join_items(
-                completed_by_section.get("Assessment MUST-SEES", [])
-            ),
-            "assessment_missed": join_items(
-                missed_by_section.get("Assessment MUST-SEES", [])
-            ),
+        try:
 
-            "vitals_completed": join_items(
-                completed_by_section.get("Vital MUST-SEES", [])
-            ),
-            "vitals_missed": join_items(
-                missed_by_section.get("Vital MUST-SEES", [])
-            ),
+            result = save_submission_to_google()
 
-            "additional_must_sees": additional_must_sees,
-            "goal1": goal1,
-            "goal": goal,
-            "general_feedback": general_feedback,
-        }
+            number_saved = result["rows_added"]
 
-        save_submission(row)
+            st.success(
+                f"CME submitted!! ay ay ay 🚑 "
+                f"{number_saved} responder(s) "
+                f"received credit."
+            )
 
-        st.success(f"Submitted! Saved to {SUBMISSIONS_FILE.name}")
+        except Exception as e:
 
-        st.write("Here is what was saved shayla:")
-        st.dataframe([row], use_container_width=True)
+            st.error(
+                "submission couldn't be saved i am sorry shayl :("
+            )
+
+            st.code(str(e))
