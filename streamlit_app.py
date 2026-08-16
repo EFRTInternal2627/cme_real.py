@@ -526,9 +526,37 @@ selected_sits = st.multiselect(
 )
 
 if selected_sits:
-    st.success("Selected: " + ", ".join(selected_sits))
+    st.success(
+        "Selected: " + ", ".join(selected_sits)
+    )
 else:
-    st.info("Choose at least one emergency type to show the MUST-SEES.")
+    st.info(
+        "Choose at least one emergency type to show the MUST-SEES."
+    )
+
+
+# -----------------------------
+# MUST-SEES CHECKLISTS
+# -----------------------------
+
+completed_by_section: dict[str, list[str]] = {}
+missed_by_section: dict[str, list[str]] = {}
+
+combined_sections = combine_must_sees(selected_sits)
+
+for section_name, items in combined_sections.items():
+
+    st.divider()
+
+    completed, missed = checkbox_list(
+        section_name,
+        items
+    )
+
+    completed_by_section[section_name] = completed
+    missed_by_section[section_name] = missed
+
+
 st.divider()
 
 ### WATCH TIME ######################################## bro my soul... ty youtube and streamlit forums!
