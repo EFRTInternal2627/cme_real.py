@@ -348,12 +348,9 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 
     return completed, missed
 
-
-
-def save_submission(row: dict[str, str]) -> None:
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
-##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY
+##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY ignore what i just said
 def save_submission_to_google():
 
     payload = {
