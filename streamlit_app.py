@@ -1,6 +1,6 @@
 from __future__ import annotations
 import requests # this is how google sheets is connected frfr
-from uiid import uiid4 # this is how we import each submission into google drive
+from uuid import uuid4 # this is how we import each submission into google drive
 from datetime import datetime # tracks the time someone submits a CME so we can see
 
 
