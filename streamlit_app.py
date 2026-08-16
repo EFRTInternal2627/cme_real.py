@@ -348,27 +348,6 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
             missed.append(item)
 
     return completed, missed
-##### OKAY STOPWATCH WIDGET HERE #####
-def get_stopwatch_time():
-    """Return current elapsed stopwatch time in seconds."""
-
-    elapsed = st.session_state.stopwatch_elapsed
-
-    if st.session_state.stopwatch_running:
-        elapsed += time.time() - st.session_state.stopwatch_started_at
-
-    return elapsed
-
-
-def format_stopwatch(seconds):
-    """Turn seconds into HH:MM:SS.xx"""
-
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    secs = seconds % 60
-
-    return f"{hours:02d}:{minutes:02d}:{secs:05.2f}"
-
 
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
@@ -437,6 +416,27 @@ def flatten_sections(
             )
 
     return "; ".join(output)
+##### OKAY STOPWATCH WIDGET HERE #####
+def get_stopwatch_time():
+    """Return current elapsed stopwatch time in seconds."""
+
+    elapsed = st.session_state.stopwatch_elapsed
+
+    if st.session_state.stopwatch_running:
+        elapsed += time.time() - st.session_state.stopwatch_started_at
+
+    return elapsed
+
+
+def format_stopwatch(seconds):
+    """Turn seconds into HH:MM:SS.xx"""
+
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = seconds % 60
+
+    return f"{hours:02d}:{minutes:02d}:{secs:05.2f}"
+
 
 
 
