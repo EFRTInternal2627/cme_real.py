@@ -644,7 +644,7 @@ with timer_col3:
         st.rerun()
 
 
-st.markdown("#### 📍 add timestamps from your sit here if you'd like! (optional lol but can be helpful for feedback)")
+st.markdown("#### 📍 add timestamps from your sit here if you'd like!")
 
 
 timestamp_note = st.text_input(
@@ -735,7 +735,7 @@ else:
     remaining = len(all_pack_items) - len(suhani_pack_check)
 
     st.info(
-        f"{remaining} pack item(s) still need to be checked. I'm deeply sorry but you will be haunted by the ghoust of Suhani Verma."
+        f"{remaining} pack item(s) still need to be checked. I'm deeply sorry but you will be haunted by the ghost of Suhani Verma."
     )
 
 
