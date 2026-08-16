@@ -1,6 +1,8 @@
 from __future__ import annotations
 import requests # this is how google sheets is connected frfr
 from uuid import uuid4 # this is how we import each submission into google drive
+import time #thank you tiya ily its tiiime for keeping time! haha! ha. its two am.
+from zoneinfo import ZoneInfo
 from datetime import datetime # tracks the time someone submits a CME so we can see
 
 
@@ -346,6 +348,27 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
             missed.append(item)
 
     return completed, missed
+##### OKAY STOPWATCH WIDGET HERE #####
+def get_stopwatch_time():
+    """Return current elapsed stopwatch time in seconds."""
+
+    elapsed = st.session_state.stopwatch_elapsed
+
+    if st.session_state.stopwatch_running:
+        elapsed += time.time() - st.session_state.stopwatch_started_at
+
+    return elapsed
+
+
+def format_stopwatch(seconds):
+    """Turn seconds into HH:MM:SS.xx"""
+
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = seconds % 60
+
+    return f"{hours:02d}:{minutes:02d}:{secs:05.2f}"
+
 
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
@@ -459,6 +482,22 @@ st.title("cme submission form")
 st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training).")
 
 st.subheader("happy training everyone! #nocarryovers")
+# -----------------------------
+# STOPWATCH STATE
+# -----------------------------
+
+if "stopwatch_running" not in st.session_state:
+    st.session_state.stopwatch_running = False
+
+if "stopwatch_started_at" not in st.session_state:
+    st.session_state.stopwatch_started_at = None
+
+if "stopwatch_elapsed" not in st.session_state:
+    st.session_state.stopwatch_elapsed = 0.0
+
+if "stopwatch_timestamps" not in st.session_state:
+    st.session_state.stopwatch_timestamps = []
+	
 who_runnin_sit = st.selectbox(
     "who runnin sit *",
     [""] + sorted(RUNNING_SIT_WHO, key=str.casefold)
@@ -487,7 +526,131 @@ if selected_sits:
     st.success("Selected: " + ", ".join(selected_sits))
 else:
     st.info("Choose at least one emergency type to show the MUST-SEES.")
+st.divider()
 
+st.subheader("⏱️ sit stopwatch")
+# Only refresh automatically while stopwatch is running
+refresh_rate = (
+    "250ms"
+    if st.session_state.stopwatch_running
+    else None
+)
+
+
+@st.fragment(run_every=refresh_rate)
+def show_stopwatch():
+
+    elapsed = get_stopwatch_time()
+
+    st.markdown(
+        f"""
+        <div style="
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            font-family: monospace;
+            padding: 15px;
+        ">
+            {format_stopwatch(elapsed)}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+show_stopwatch()
+timer_col1, timer_col2, timer_col3 = st.columns(3)
+
+
+with timer_col1:
+
+    if st.button(
+        "▶️ Start",
+        disabled=st.session_state.stopwatch_running,
+        use_container_width=True,
+    ):
+
+        st.session_state.stopwatch_started_at = time.time()
+        st.session_state.stopwatch_running = True
+
+        st.rerun()
+
+
+with timer_col2:
+
+    if st.button(
+        "⏸️ Pause",
+        disabled=not st.session_state.stopwatch_running,
+        use_container_width=True,
+    ):
+
+        st.session_state.stopwatch_elapsed = (
+            get_stopwatch_time()
+        )
+
+        st.session_state.stopwatch_running = False
+        st.session_state.stopwatch_started_at = None
+
+        st.rerun()
+
+
+with timer_col3:
+
+    if st.button(
+        "🔄 Reset",
+        use_container_width=True,
+    ):
+
+        st.session_state.stopwatch_running = False
+        st.session_state.stopwatch_started_at = None
+        st.session_state.stopwatch_elapsed = 0.0
+        st.session_state.stopwatch_timestamps = []
+
+        st.rerun()
+		st.markdown("#### 📍 Add timestamp")
+
+timestamp_note = st.text_input(
+    "What happened?",
+    placeholder="e.g. First vitals, salbutamol given, reassessment...",
+    key="timestamp_note",
+)
+if st.button(
+    "📍 Mark timestamp",
+    use_container_width=True,
+):
+
+    current_elapsed = get_stopwatch_time()
+
+    clock_time = datetime.now(
+        ZoneInfo("America/Toronto")
+    ).strftime("%H:%M:%S")
+
+    note = timestamp_note.strip()
+
+    if not note:
+        note = (
+            f"Timestamp "
+            f"{len(st.session_state.stopwatch_timestamps) + 1}"
+        )
+
+    st.session_state.stopwatch_timestamps.append(
+        {
+            "Elapsed": format_stopwatch(current_elapsed),
+            "Event": note,
+            "Clock time": clock_time,
+        }
+    )
+
+    st.rerun()
+	if st.session_state.stopwatch_timestamps:
+
+    st.markdown("#### 📝 Sit timeline")
+
+    st.dataframe(
+        st.session_state.stopwatch_timestamps,
+        use_container_width=True,
+        hide_index=True,
+    )
 
 completed_by_section: dict[str, list[str]] = {}
 missed_by_section: dict[str, list[str]] = {}
