@@ -687,11 +687,24 @@ general_feedback = st.text_area(
     "general feedback for your responder!"
 )
 
-suhanipackcheck = st.multiselect(
-    "Please make sure stuff in pack is put back nicely tysm! Suhani will hunt you down otherwise <3",
-    PACK_CHECK_OPTIONS,
-    default=[],
-)
+suhani_pack_check = []
+
+for item in PACK_CHECK_OPTIONS:
+    if st.checkbox(
+        item,
+        key=f"pack_check_{item}"
+    ):
+        completed_pack_check.append(item)
+all_pack_items = list(PACK_CHECK_OPTIONS)
+
+if len(completed_pack_check) == len(all_pack_items):
+    st.success("✅ Pack check complete!")
+else:
+    remaining = len(all_pack_items) - len(completed_pack_check)
+
+    st.info(
+        f"{remaining} pack item(s) still need to be checked."
+    )
 
 
 uploaded_files = st.file_uploader(
