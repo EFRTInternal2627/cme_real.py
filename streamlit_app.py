@@ -529,7 +529,7 @@ else:
 st.divider()
 
 st.divider()
-
+### WATCH TIME ######################################## bro my soul... ty youtube and streamlit forums!
 st.subheader("⏱️ sit stopwatch")
 
 
@@ -614,12 +614,12 @@ with timer_col3:
         st.rerun()
 
 
-st.markdown("#### 📍 Add timestamp")
+st.markdown("#### 📍 add timestamps from your sit here if you'd like! (optional lol but can be helpful for feedback)")
 
 
 timestamp_note = st.text_input(
     "What happened?",
-    placeholder="e.g. First vitals, salbutamol given, reassessment...",
+    placeholder="e.g. ABCB's cleared, Tx administered, you get the gist",
     key="timestamp_note",
 )
 
