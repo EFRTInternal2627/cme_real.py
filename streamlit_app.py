@@ -457,9 +457,12 @@ def send_to_google_sheet(row: dict[str, str], uploaded_files_data=None) -> None:
 st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe got to be swagged up
+	layout="wide",
+	initial_sidebar_state="collapsed",
 )
 st.image(
     "header.png",
+	 width="stretch",
     use_container_width=True
 )
 
@@ -528,7 +531,6 @@ else:
     st.info("Choose at least one emergency type to show the MUST-SEES.")
 st.divider()
 
-st.divider()
 ### WATCH TIME ######################################## bro my soul... ty youtube and streamlit forums!
 st.subheader("⏱️ sit stopwatch")
 
