@@ -693,6 +693,7 @@ suhani_pack_check = []
 
 for item in PACK_CHECK_OPTIONS:
     if st.checkbox(
+		"Please make sure the inside of our training packs stay tidy! Or else... **THEY** might get you.",
         item,
         key=f"pack_check_{item}"
     ):
