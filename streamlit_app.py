@@ -351,47 +351,30 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
 ##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY ignore what i just said
 def save_submission_to_google():
-	credited_responders = list(
+    credited_responders = list(
         dict.fromkeys(
             [who_runnin_sit] + credit_sit_who
         )
     )
+
     payload = {
-        "secret": st.secrets["cme_secret"], 
-#lol the secret is an id thats a part of the google scripts code inside of the spreadsheet dont fear dear shayla
+        "secret": st.secrets["cme_secret"],
         "submission_id": str(uuid4()),
-
         "who_runnin_sit": who_runnin_sit,
-
-        "credit_sit_who": credit_sit_who,
-
+        "credit_sit_who": credited_responders,
         "which_sit": which_sit,
-
         "selected_sits": selected_sits,
-
-        "completed_must_sees":
-            flatten_sections(
-                completed_by_section
-            ),
-
-        "missed_must_sees":
-            flatten_sections(
-                missed_by_section
-            ),
-
-        "additional_must_sees":
-            additional_must_sees,
-
-        "goal1":
-            goal1,
-
-        "goal":
-            goal or "",
-
-        "general_feedback":
-            general_feedback,
+        "completed_must_sees": flatten_sections(
+            completed_by_section
+        ),
+        "missed_must_sees": flatten_sections(
+            missed_by_section
+        ),
+        "additional_must_sees": additional_must_sees,
+        "goal1": goal1,
+        "goal": goal or "",
+        "general_feedback": general_feedback,
     }
-
 
     response = requests.post(
         st.secrets["google_script_url"],
@@ -403,7 +386,6 @@ def save_submission_to_google():
 
     result = response.json()
 
-
     if not result.get("ok"):
         raise RuntimeError(
             result.get(
@@ -413,6 +395,7 @@ def save_submission_to_google():
         )
 
     return result
+	
 
 def join_items(items: list[str]) -> str:
 #
