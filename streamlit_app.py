@@ -528,8 +528,11 @@ else:
     st.info("Choose at least one emergency type to show the MUST-SEES.")
 st.divider()
 
+st.divider()
+
 st.subheader("⏱️ sit stopwatch")
-# Only refresh automatically while stopwatch is running
+
+
 refresh_rate = (
     "250ms"
     if st.session_state.stopwatch_running
@@ -559,6 +562,8 @@ def show_stopwatch():
 
 
 show_stopwatch()
+
+
 timer_col1, timer_col2, timer_col3 = st.columns(3)
 
 
@@ -607,13 +612,18 @@ with timer_col3:
         st.session_state.stopwatch_timestamps = []
 
         st.rerun()
-		st.markdown("#### 📍 Add timestamp")
+
+
+st.markdown("#### 📍 Add timestamp")
+
 
 timestamp_note = st.text_input(
     "What happened?",
     placeholder="e.g. First vitals, salbutamol given, reassessment...",
     key="timestamp_note",
 )
+
+
 if st.button(
     "📍 Mark timestamp",
     use_container_width=True,
@@ -642,7 +652,9 @@ if st.button(
     )
 
     st.rerun()
-	if st.session_state.stopwatch_timestamps:
+
+
+if st.session_state.stopwatch_timestamps:
 
     st.markdown("#### 📝 Sit timeline")
 
@@ -651,20 +663,6 @@ if st.button(
         use_container_width=True,
         hide_index=True,
     )
-
-completed_by_section: dict[str, list[str]] = {}
-missed_by_section: dict[str, list[str]] = {}
-
-combined_sections = combine_must_sees(selected_sits)
-
-for section_name, items in combined_sections.items():
-    st.divider()
-
-    completed, missed = checkbox_list(section_name, items)
-
-    completed_by_section[section_name] = completed
-    missed_by_section[section_name] = missed
-
 
 st.divider()
 
