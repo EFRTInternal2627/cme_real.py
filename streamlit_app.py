@@ -540,10 +540,11 @@ general_feedback = st.text_area(
 )
 
 suhanipackcheck = st.multiselect(
-	"Please make sure stuff in pack is put back nicely tysm! Suhani will haunt you and your children if you don't.",
-	PACK_CHECK_OPTIONS,
-	index=None,
+    "Please make sure stuff in pack is put back nicely tysm! Suhani will hunt you down otherwise <3",
+    PACK_CHECK_OPTIONS,
+    default=[],
 )
+
 
 uploaded_files = st.file_uploader(
     "If suhani and jen said to submit a photo of something, it probably goes here",
