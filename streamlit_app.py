@@ -476,12 +476,14 @@ who_runnin_sit = st.selectbox(
     "who runnin sit *",
     [""] + sorted(RUNNING_SIT_WHO, key=str.casefold)
 )
-
-credit_sit_who = st.selectbox(
-    "Who is getting CME credit? *",
-    [""] + sorted(CREDIT_SIT_WHO, key=str.casefold)
-)
 # i am no longer a lazy chud this should fix the alphabetical order 
+
+credit_sit_who = st.multiselect(
+    "who is recieving credit for this sit? *",
+    list(RUNNING_SIT_WHO),
+    help="choose one or more responders!",
+)
+
 
 which_sit = st.selectbox(
     "which CME are you completing?",
@@ -537,7 +539,7 @@ general_feedback = st.text_area(
     "general feedback for your responder!"
 )
 
-suhanipackcheck = st.radio(
+suhanipackcheck = st.multiselect(
 	"Please make sure stuff in pack is put back nicely tysm! Suhani will haunt you and your children if you don't.",
 	PACK_CHECK_OPTIONS,
 	index=None,
