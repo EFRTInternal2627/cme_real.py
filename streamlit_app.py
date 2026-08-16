@@ -1,12 +1,12 @@
 from __future__ import annotations
 import requests # this is how google sheets is connected frfr
-import csv # this is how we import each submission
+from uiid import uiid4 # this is how we import each submission into google drive
 from datetime import datetime # tracks the time someone submits a CME so we can see
-from pathlib import Path
+
 
 import streamlit as st # the website we using for the cme submissions
 import base64 # dis is how we upload photos and pdfs for THCME!
-GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2_XU8NUUDZ0ALNhQ_UcXqR8hSunltU8P2W7K1wI5H0WYIeWiZZW9YRVRpaKJJMzk/exec"
+GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyE8-HIyXG1YAmOLgjPmq_4tKZ9vsaq2D9YX7mHqfq24e2RdksrtrIZxWeuZjf8tBdr/exec"
 SUBMISSIONS_FILE = Path("cme_submissions.csv")
 # these are the lists that contain all of us as strings (so you can choose dif people for sits)
 RUNNING_SIT_WHO = ["suhani verma", "jen francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
@@ -353,22 +353,85 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 def save_submission(row: dict[str, str]) -> None:
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
-# row is the name of the dictionary for the submissions btw 
-	# keys will be the headers and then the values will be inputed as data woo woo
-    file_exists = SUBMISSIONS_FILE.exists()
-# this checks if the CSV file already exists, if not...
-    with SUBMISSIONS_FILE.open("a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(row.keys()))
-# it writes one here,
-        if not file_exists:
-            writer.writeheader()
-# and then saves it in here
-        writer.writerow(row)
+##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY
+def save_submission_to_google():
 
+    payload = {
+        "secret": st.secrets["cme_secret"], 
+#lol the secret is an id thats a part of the google scripts code inside of the spreadsheet dont fear dear shayla
+        "submission_id": str(uuid4()),
+
+        "who_runnin_sit": who_runnin_sit,
+
+        "credit_sit_who": credit_sit_who,
+
+        "which_sit": which_sit,
+
+        "selected_sits": selected_sits,
+
+        "completed_must_sees":
+            flatten_sections(
+                completed_by_section
+            ),
+
+        "missed_must_sees":
+            flatten_sections(
+                missed_by_section
+            ),
+
+        "additional_must_sees":
+            additional_must_sees,
+
+        "goal1":
+            goal1,
+
+        "goal":
+            goal or "",
+
+        "general_feedback":
+            general_feedback,
+    }
+
+
+    response = requests.post(
+        st.secrets["google_script_url"],
+        json=payload,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    result = response.json()
+
+
+    if not result.get("ok"):
+        raise RuntimeError(
+            result.get(
+                "error",
+                "Unknown Google Sheets error"
+            )
+        )
+
+    return result
 
 def join_items(items: list[str]) -> str:
 #
     return "; ".join(items)
+def flatten_sections(
+    sections: dict[str, list[str]]
+) -> str:
+
+    output = []
+
+    for section_name, items in sections.items():
+
+        for item in items:
+            output.append(
+                f"{section_name}: {item}"
+            )
+
+    return "; ".join(output)
+
 
 
 # Streamlit app  to google sheets stuff. thank you youtube. thank you reddit. thank you google.
@@ -473,13 +536,15 @@ goal = st.radio(
     index=None,
 )
 
-pack_check = st.checkbox(
-	"We want to keep these packs in good shape! Make sure all of the following are functional and in your pack, if not pls let an exec know to restock tysm :)",
-	PACK_CHECK_OPTIONS
-)
 
 general_feedback = st.text_area(
     "general feedback for your responder!"
+)
+
+suhanipackcheck = st.radio(
+	"Please make sure stuff in pack is put back nicely tysm! Suhani will haunt you and your children if you don't.",
+	PACK_CHECK_OPTIONS,
+	index=None,
 )
 
 uploaded_files = st.file_uploader(
@@ -488,59 +553,53 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True,
     help="Accepted files: JPEG, PNG, PDF, DOC, DOCX, idk what other files you got bruv"
 )
-if st.button("Submit", type="primary"):
+######### OKAY. So what's up next is after submit button is pressed
+if st.button("submit cme 🚑"):
+
     if not who_runnin_sit:
-        st.error("Please choose who runnin da sit.")
+        st.error(
+            "pls choose who ran the sit!"
+        )
+
+    elif not credit_sit_who:
+        st.error(
+            "pls choose who gets credit!"
+        )
+
+    elif not which_sit:
+        st.error(
+            "pls choose which CME this is!"
+        )
 
     elif not selected_sits:
-        st.error("Please choose at least one sit type.")
+        st.error(
+            "pls choose at least one emergency type!"
+        )
 
-    elif not goal:
-        st.error("where??? is yo goal???")
+    elif goal is None:
+        st.error(
+            "pls answer whether the goal was achieved!"
+        )
 
     else:
-        row = {
-            "submitted_at": datetime.now().isoformat(timespec="seconds"),
-            "who_runnin_sit": who_runnin_sit,
-			"credit_sit_who": credit_sit_who,
-            "which_sit": which_sit,
-            "selected_sits": join_items(selected_sits),
-			"uploaded_file_names": join_items([file["name"] for file in uploaded_files_data]),
-   			"uploaded_file_count": str(len(uploaded_files_data)),
-			
 
-            "assessment_completed": join_items(
-                completed_by_section.get("Assessment MUST-SEES", [])
-            ),
-            "assessment_missed": join_items(
-                missed_by_section.get("Assessment MUST-SEES", [])
-            ),
-
-            "vitals_completed": join_items(
-                completed_by_section.get("Vital MUST-SEES", [])
-            ),
-            "vitals_missed": join_items(
-                missed_by_section.get("Vital MUST-SEES", [])
-            ),
-
-            "additional_must_sees": additional_must_sees,
-            "goal1": goal1,
-            "goal": goal,
-            "general_feedback": general_feedback,
-        }
-
-
-        save_submission(row)
         try:
-            send_to_google_sheet(row, uploaded_files_data)
-            st.success("Submitted! Your CME is saved!.")
 
-        except Exception as error:
-            st.warning(
-                "Not saved to google sheet EEK shoot training a quick text. "
+            result = save_submission_to_google()
+
+            number_saved = result["rows_added"]
+
+            st.success(
+                f"CME submitted!! ay ay ay 🚑 "
+                f"{number_saved} responder(s) "
+                f"received credit."
             )
-            st.write(error)
 
-        st.write("Here is what was saved:")
-        st.dataframe([row], use_container_width=True)
+        except Exception as e:
+
+            st.error(
+                "submission couldn't be saved i am sorry shayla :("
+            )
+
+            st.code(str(e))
 
