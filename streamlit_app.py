@@ -356,7 +356,6 @@ def save_submission_to_google():
             [who_runnin_sit] + credit_sit_who
         )
     )
-
     payload = {
         "secret": st.secrets["cme_secret"], 
 #lol the secret is an id thats a part of the google scripts code inside of the spreadsheet dont fear dear shayla
