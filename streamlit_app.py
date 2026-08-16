@@ -351,6 +351,11 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
 ##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY ignore what i just said
 def save_submission_to_google():
+	credited_responders = list(
+        dict.fromkeys(
+            [who_runnin_sit] + credit_sit_who
+        )
+    )
 
     payload = {
         "secret": st.secrets["cme_secret"], 
@@ -479,7 +484,7 @@ who_runnin_sit = st.selectbox(
 # i am no longer a lazy chud this should fix the alphabetical order 
 
 credit_sit_who = st.multiselect(
-    "who is recieving credit for this sit? *",
+    "who else is recieving credit for this sit? *",
     list(RUNNING_SIT_WHO),
     help="choose one or more responders!",
 )
