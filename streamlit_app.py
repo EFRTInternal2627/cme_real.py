@@ -700,7 +700,7 @@ all_pack_items = list(PACK_CHECK_OPTIONS)
 if len(suhani_pack_check) == len(all_pack_items):
     st.success("✅ Pack check complete!")
 else:
-    remaining = len(all_pack_items) - len(completed_pack_check)
+    remaining = len(all_pack_items) - len(suhani_pack_check)
 
     st.info(
         f"{remaining} pack item(s) still need to be checked. I'm deeply sorry but you will be haunted by the ghoust of Suhani Verma."
