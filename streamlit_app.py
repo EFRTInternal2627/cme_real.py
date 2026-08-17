@@ -650,7 +650,7 @@ st.markdown("#### 📍 add timestamps from your sit here if you'd like!")
 
 timestamp_note = st.text_input(
     "What happened?",
-    placeholder="e.g. ABCB's cleared, Tx administered, you get the gist",
+    placeholder="e.g. ACBC's cleared, Tx administered, you get the gist",
     key="timestamp_note",
 )
 
@@ -727,7 +727,7 @@ for item in PACK_CHECK_OPTIONS:
         item,
         key=f"pack_check_{item}"
     ):
-        completed_pack_check.append(item)
+        suhani_pack_check.append(item)
 all_pack_items = list(PACK_CHECK_OPTIONS)
 
 if len(suhani_pack_check) == len(all_pack_items):
