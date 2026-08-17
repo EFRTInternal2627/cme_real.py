@@ -43,7 +43,7 @@ MUST_SEES = { #this is dictionary 1
             "Intervention Considered",
             "Suction/Adjunct Consideration",
             "Correct airway intervention if provided",
-	    "Reassess Airway after intervention"
+	    	"Reassess Airway after intervention",
             "Transfer Pad with USEFUL STUFF ON IT",
             "Correct Radio Codes! For Everything!",
             "Consideration of Final Transport/Justification of Transport Decided",
@@ -90,9 +90,9 @@ MUST_SEES = { #this is dictionary 1
         "Vital MUST-SEES": [
             "Skin (did they FEEL the skin for a temperature?)",
             "SpO2%",
-            "Pulse Quality and Rate"
-            "Respiration Quality and Rate"
-            "Blood Pressure if ya got time fr"
+            "Pulse Quality and Rate",
+            "Respiration Quality and Rate",
+            "Blood Pressure if ya got time fr",
         ],
     },
      "Abdominal Emergencies": {
@@ -186,7 +186,7 @@ MUST_SEES = { #this is dictionary 1
             "SAMPLE",
             "Full Intox LOQ",
             "Consideration of vomit/patent airway",
-            "Consideration of Pt decompensation"
+            "Consideration of Pt decompensation",
             "Transfer Pad with USEFUL STUFF ON IT",
             "Correct Radio Codes! For Everything!",
             "Consideration of Final Transport/Justification of Transport Decided",
