@@ -409,15 +409,6 @@ except Exception:
         f"Response from Google:\n"
         f"{response.text[:1000]}"
     )
-    if not result.get("ok"):
-        raise RuntimeError(
-            result.get(
-                "error",
-                "Unknown Google Sheets error"
-            )
-        )
-
-    return result
 	
 
 def join_items(items: list[str]) -> str:
