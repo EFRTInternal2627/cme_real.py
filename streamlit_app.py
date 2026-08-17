@@ -379,8 +379,7 @@ def save_submission_to_google(upload_stuff):
         "general_feedback": general_feedback,
 		"files": prepare_uploaded_files(uploaded_files),
     }
-
-    response = requests.post(
+response = requests.post(
     st.secrets["google_script_url"],
     json=payload,
     timeout=60,
@@ -410,7 +409,6 @@ except Exception:
         f"Response from Google:\n"
         f"{response.text[:1000]}"
     )
-
     if not result.get("ok"):
         raise RuntimeError(
             result.get(
