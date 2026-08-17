@@ -353,34 +353,8 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
 ##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY ignore what i just said
-def save_submission_to_google(upload_stuff):
-    credited_responders = list(
-        dict.fromkeys(
-            [who_runnin_sit] + credit_sit_who
-        )
-    )
-
-    payload = {
-        "secret": st.secrets["cme_secret"],
-        "submission_id": str(uuid4()),
-        "who_runnin_sit": who_runnin_sit,
-        "credit_sit_who": credited_responders,
-        "which_sit": which_sit,
-        "selected_sits": selected_sits,
-        "completed_must_sees": flatten_sections(
-            completed_by_section
-        ),
-        "missed_must_sees": flatten_sections(
-            missed_by_section
-        ),
-        "additional_must_sees": additional_must_sees,
-        "goal1": goal1,
-        "goal": goal or "",
-        "general_feedback": general_feedback,
-		"files": prepare_uploaded_files(uploaded_files),
-    }
-	
-def save_submission_to_google(uploaded_files):
+def save_submission_to_google():
+    # person who runs sit automatically gets credit too
     credited_responders = list(
         dict.fromkeys(
             [who_runnin_sit] + credit_sit_who
@@ -407,42 +381,23 @@ def save_submission_to_google(uploaded_files):
         "goal1": goal1,
         "goal": goal or "",
         "general_feedback": general_feedback,
-
-        "files": prepare_uploaded_files(uploaded_files),
     }
 
     response = requests.post(
         st.secrets["google_script_url"],
         json=payload,
-        timeout=60,
-        allow_redirects=True,
+        timeout=30,
     )
 
     response.raise_for_status()
 
-    if not response.text.strip():
-        raise RuntimeError(
-            f"Google returned an empty response. "
-            f"Status code: {response.status_code}"
-        )
-
-    try:
-        result = response.json()
-
-    except Exception:
-        raise RuntimeError(
-            "Google did not return JSON.\n\n"
-            f"Status code: {response.status_code}\n"
-            f"Final URL: {response.url}\n\n"
-            f"Response from Google:\n"
-            f"{response.text[:-2000]}"
-        )
+    result = response.json()
 
     if not result.get("ok"):
         raise RuntimeError(
             result.get(
                 "error",
-                "Unknown Google error"
+                "Unknown Google Sheets error"
             )
         )
 
@@ -820,7 +775,7 @@ if st.button("submit cme 🚑"):
 
         try:
 
-            result = save_submission_to_google(uploaded_files)
+            result = save_submission_to_google()
 
             number_saved = result["rows_added"]
 
