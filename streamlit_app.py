@@ -98,7 +98,8 @@ MUST_SEES = { #this is dictionary 1
      "Abdominal Emergencies": {
         "Assessment MUST-SEES": [
             "Primary Assessment (EMCAP + LOC + ACBC)",
-            "Transport Decision (Stay & Play? or Load and Go?) + Pt Positioning Consideration",
+            "Transport Decision (Stay & Play? or Load and Go?)",
+			"Consideration of Pt positioning",
             "SAMPLE",
             "OPQRST",
             "Full Abdo LOQ",
