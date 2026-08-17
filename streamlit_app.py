@@ -113,7 +113,7 @@ MUST_SEES = { #this is dictionary 1
             "Skin (did they FEEL the skin for a temperature?)",
             "SpO2%",
             "Pulse Quality",
-            "Blood Pressure Sitting",
+            "Blood Pressure Si/Su",
             "BGL",
         ],
     },
