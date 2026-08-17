@@ -379,38 +379,74 @@ def save_submission_to_google(upload_stuff):
         "general_feedback": general_feedback,
 		"files": prepare_uploaded_files(uploaded_files),
     }
-response = requests.post(
-    st.secrets["google_script_url"],
-    json=payload,
-    timeout=60,
-    allow_redirects=True,
-)
-
-response.raise_for_status()
-
-
-# Make sure Google actually returned something
-if not response.text.strip():
-    raise RuntimeError(
-        f"Google returned an empty response. "
-        f"Status code: {response.status_code}"
-    )
-
-
-# Try to read Google's response as JSON
-try:
-    result = response.json()
-
-except Exception:
-    raise RuntimeError(
-        "Google did not return JSON.\n\n"
-        f"Status code: {response.status_code}\n"
-        f"Final URL: {response.url}\n\n"
-        f"Response from Google:\n"
-        f"{response.text[:1000]}"
-    )
 	
+def save_submission_to_google(uploaded_files):
+    credited_responders = list(
+        dict.fromkeys(
+            [who_runnin_sit] + credit_sit_who
+        )
+    )
 
+    payload = {
+        "secret": st.secrets["cme_secret"],
+        "submission_id": str(uuid4()),
+        "who_runnin_sit": who_runnin_sit,
+        "credit_sit_who": credited_responders,
+        "which_sit": which_sit,
+        "selected_sits": selected_sits,
+
+        "completed_must_sees": flatten_sections(
+            completed_by_section
+        ),
+
+        "missed_must_sees": flatten_sections(
+            missed_by_section
+        ),
+
+        "additional_must_sees": additional_must_sees,
+        "goal1": goal1,
+        "goal": goal or "",
+        "general_feedback": general_feedback,
+
+        "files": prepare_uploaded_files(uploaded_files),
+    }
+
+    response = requests.post(
+        st.secrets["google_script_url"],
+        json=payload,
+        timeout=60,
+        allow_redirects=True,
+    )
+
+    response.raise_for_status()
+
+    if not response.text.strip():
+        raise RuntimeError(
+            f"Google returned an empty response. "
+            f"Status code: {response.status_code}"
+        )
+
+    try:
+        result = response.json()
+
+    except Exception:
+        raise RuntimeError(
+            "Google did not return JSON.\n\n"
+            f"Status code: {response.status_code}\n"
+            f"Final URL: {response.url}\n\n"
+            f"Response from Google:\n"
+            f"{response.text[:1000]}"
+        )
+
+    if not result.get("ok"):
+        raise RuntimeError(
+            result.get(
+                "error",
+                "Unknown Google error"
+            )
+        )
+
+    return result
 def join_items(items: list[str]) -> str:
 #
     return "; ".join(items)
@@ -453,11 +489,6 @@ def format_stopwatch(seconds):
 
 
 # Streamlit app  to google sheets stuff. thank you youtube. thank you reddit. thank you google.
-def send_to_google_sheet(row: dict[str, str], uploaded_files_data=None) -> None:
-    payload = {
-        "row": row,
-        "files": uploaded_files_data or [],
-    }
 
     response = requests.post(
         GOOGLE_SHEET_WEB_APP_URL,
@@ -572,7 +603,7 @@ for section_name, items in combined_sections.items():
 st.divider()
 
 ### WATCH TIME ######################################## bro my soul... ty youtube and streamlit forums!
-st.subheader("⏱️ sit stopwatch")
+st.subheader("⏱️ sit stopwatch!")
 
 
 refresh_rate = (
@@ -789,7 +820,7 @@ if st.button("submit cme 🚑"):
 
         try:
 
-            result = save_submission_to_google(uploaded_stuff)
+            result = save_submission_to_google(uploaded_files)
 
             number_saved = result["rows_added"]
 
