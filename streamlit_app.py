@@ -353,7 +353,7 @@ def checkbox_list(section_name: str, items: list[str]) -> tuple[list[str], list[
   
 #dis will save one form submission to a CSV file to keep track, it should appear in the same folder as this python file? i hope???
 ##NAH I COMPLETELY FORGOT THIS IS GOING TO A GOOGLE SHEET NOT A CSV FILE LAWDDDD HAVE MERCY ignore what i just said
-def save_submission_to_google():
+def save_submission_to_google(upload_stuff):
     credited_responders = list(
         dict.fromkeys(
             [who_runnin_sit] + credit_sit_who
@@ -377,17 +377,39 @@ def save_submission_to_google():
         "goal1": goal1,
         "goal": goal or "",
         "general_feedback": general_feedback,
+		"files": prepare_uploaded_files(uploaded_files),
     }
 
     response = requests.post(
-        st.secrets["google_script_url"],
-        json=payload,
-        timeout=30
+    st.secrets["google_script_url"],
+    json=payload,
+    timeout=60,
+    allow_redirects=True,
+)
+
+response.raise_for_status()
+
+
+# Make sure Google actually returned something
+if not response.text.strip():
+    raise RuntimeError(
+        f"Google returned an empty response. "
+        f"Status code: {response.status_code}"
     )
 
-    response.raise_for_status()
 
+# Try to read Google's response as JSON
+try:
     result = response.json()
+
+except Exception:
+    raise RuntimeError(
+        "Google did not return JSON.\n\n"
+        f"Status code: {response.status_code}\n"
+        f"Final URL: {response.url}\n\n"
+        f"Response from Google:\n"
+        f"{response.text[:1000]}"
+    )
 
     if not result.get("ok"):
         raise RuntimeError(
@@ -778,7 +800,7 @@ if st.button("submit cme 🚑"):
 
         try:
 
-            result = save_submission_to_google()
+            result = save_submission_to_google(uploaded_stuff)
 
             number_saved = result["rows_added"]
 
