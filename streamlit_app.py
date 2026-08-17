@@ -435,7 +435,7 @@ def save_submission_to_google(uploaded_files):
             f"Status code: {response.status_code}\n"
             f"Final URL: {response.url}\n\n"
             f"Response from Google:\n"
-            f"{response.text[:1000]}"
+            f"{response.text[:-2000]}"
         )
 
     if not result.get("ok"):
