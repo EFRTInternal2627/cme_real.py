@@ -701,7 +701,7 @@ additional_must_sees = st.text_input(
 )
 
 goal1 = st.text_area(
-    "what was the goal of your sit fam?"
+    "what was the goal of your sit that you wanted to achieve?"
 )
 
 goal = st.radio(
@@ -738,7 +738,7 @@ else:
 
 
 uploaded_files = st.file_uploader(
-    "If suhani and jen said to submit a photo of something, it probably goes here (this is still under construction lol)",
+    "If suhani and jen said to submit a photo of something, it probably goes here!",
     type=["jpg", "jpeg", "png", "pdf", "doc", "docx"],
     accept_multiple_files=True,
     help="Accepted files: JPEG, PNG, PDF, DOC, DOCX, idk what other files you got bruv"
