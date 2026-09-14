@@ -251,6 +251,10 @@ MUST_SEES = {
             "Pulse",
         ],
     },
+		"Optional/Skills CME": {
+			"Assessment MUST-SEES": [
+				"Skill practiced and understood!",
+		]
 }
 
 
@@ -326,6 +330,11 @@ def save_submission(row: dict[str, str]) -> None:
 ##UPDATE! No longer using CSV file that is silly. will be using google sheets again lol
   # this is how we will do that actually
 def save_submission_to_google():
+	credited_responders = list(
+		dict.fromkeys(
+			[who_runnin_sit]+list(credit_sit_who)
+		)
+	)
 
     payload = {
         "secret": st.secrets["cme_secret"], 
@@ -334,7 +343,7 @@ def save_submission_to_google():
 
         "who_runnin_sit": who_runnin_sit,
 
-        "credit_sit_who": credit_sit_who,
+        "credit_sit_who": credited_responders,
 
         "which_sit": which_sit,
 
