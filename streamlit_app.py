@@ -264,6 +264,10 @@ MUST_SEES = { #this is dictionary 1
             "Pulse",
         ],
     },
+	"Optional/Skills CME": {
+			"Assessment MUST-SEES": [
+				"Skill practiced and understood!",
+		]
 }
 
 
@@ -357,7 +361,7 @@ def save_submission_to_google():
     # person who runs sit automatically gets credit too
     credited_responders = list(
         dict.fromkeys(
-            [who_runnin_sit] + credit_sit_who
+            [who_runnin_sit] + list(credit_sit_who)
         )
     )
 
