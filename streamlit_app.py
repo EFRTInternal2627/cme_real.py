@@ -268,6 +268,7 @@ MUST_SEES = { #this is dictionary 1
 			"Assessment MUST-SEES": [
 				"Skill practiced and understood!",
 		]
+	}
 }
 
 
