@@ -263,7 +263,7 @@ MUST_SEES = { #this is dictionary 1
             "Pulse",
         ],
     },
-	"Concussion/Head Trauma Emergencies": {
+	"Concussion + Head Trauma Emergencies" : {
 		"Assessment MUST-SEES": [
 			"Primary Assessment (EMCAP + LOC + ACBC)",
 			"Serial Recall + A&Ox3",
