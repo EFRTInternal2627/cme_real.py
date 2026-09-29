@@ -10,9 +10,9 @@ import streamlit as st # the website we using for the cme submissions
 import base64 # dis is how we upload photos and pdfs for THCME!
 GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyE8-HIyXG1YAmOLgjPmq_4tKZ9vsaq2D9YX7mHqfq24e2RdksrtrIZxWeuZjf8tBdr/exec"
 # these are the lists that contain all of us as strings (so you can choose dif people for sits)
-RUNNING_SIT_WHO = ["suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
+RUNNING_SIT_WHO = ["LINDA EFROOMBA", "suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 # i should put these in alphabetical order but i am a lazy chud
-CREDIT_SIT_WHO = ["suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
+CREDIT_SIT_WHO = ["LINDA EFROOMBA", "suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
 SIT_OPTIONS = ["OCME", "MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
 #this is something i think is really important! having a clear goal means better quality cmes
@@ -53,6 +53,28 @@ MUST_SEES = { #this is dictionary 1
             "SpO2%",
         ],
     },
+	"Concussion/Head Trauma Emergencies": {
+		"Assessment MUST-SEES": [
+			"Primary Assessment (EMCAP + LOC + ACBC)",
+			"Serial Recall + A&Ox3",
+			"Consideration of ruling in/out SMR",
+			"Correct SMR if indicated",
+			"Transport Decision (Stay & Play? or Load and Go?",
+			"Localized RTS of the head/neck",
+			"SAMPLE",
+			"Concussion LOQ (A/V, PCS, Previous Hx, etc.)",
+			"Transfer Pad with USEFUL STUFF ON IT",
+			"Correct Radio Codes! For Everything!",
+			"Consideration of Final Transport/Justification of Transport Decided",
+		],
+		"Vital MUST-SEES": [
+			"Skin (did they FEEL the skin for a temperature?)",
+			"Sp02%",
+			"Blood Pressure Si/Su",
+			"Pupils",
+			"Pulse Quality and Rate",
+		],
+	}
     
 
     "Breathing Emergency": {
@@ -485,7 +507,7 @@ def prepare_uploaded_files(uploaded_files):
 	
 st.title("cme submission form")
 
-st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training).")
+st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training). If you are submitting a CME and have already reached your maximum 2 for credit, put down LINDA EFROOMBA as the Responder running the sit!")
 
 st.subheader("happy training everyone! #nocarryovers")
 # -----------------------------
