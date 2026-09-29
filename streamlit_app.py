@@ -284,7 +284,7 @@ MUST_SEES = { #this is dictionary 1
 			"Pupils",
 			"Pulse Quality and Rate",
 		],
-	}
+	},
 	"Optional/Skills CME": {
 			"Assessment MUST-SEES": [
 				"Skill practiced and understood!",
