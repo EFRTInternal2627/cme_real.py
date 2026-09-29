@@ -269,7 +269,7 @@ MUST_SEES = { #this is dictionary 1
 			"Serial Recall + A&Ox3",
 			"Consideration of ruling in/out SMR",
 			"Correct SMR if indicated",
-			"Transport Decision (Stay & Play? or Load and Go?",
+			"Transport Decision (Stay & Play? or Load and Go?)",
 			"Localized RTS of the head/neck",
 			"SAMPLE",
 			"Concussion LOQ (A/V, PCS, Previous Hx, etc.)",
