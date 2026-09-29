@@ -52,31 +52,7 @@ MUST_SEES = { #this is dictionary 1
             "Skin (did they FEEL the skin for a temperature?)",
             "SpO2%",
         ],
-    },
-	
-	"Concussion/Head Trauma Emergencies": {
-		"Assessment MUST-SEES": [
-			"Primary Assessment (EMCAP + LOC + ACBC)",
-			"Serial Recall + A&Ox3",
-			"Consideration of ruling in/out SMR",
-			"Correct SMR if indicated",
-			"Transport Decision (Stay & Play? or Load and Go?",
-			"Localized RTS of the head/neck",
-			"SAMPLE",
-			"Concussion LOQ (A/V, PCS, Previous Hx, etc.)",
-			"Transfer Pad with USEFUL STUFF ON IT",
-			"Correct Radio Codes! For Everything!",
-			"Consideration of Final Transport/Justification of Transport Decided",
-		],
-		"Vital MUST-SEES": [
-			"Skin (did they FEEL the skin for a temperature?)",
-			"Sp02%",
-			"Blood Pressure Si/Su",
-			"Pupils",
-			"Pulse Quality and Rate",
-		],
-	}
-    
+    }, 
 
     "Breathing Emergency": {
         "Assessment MUST-SEES": [
