@@ -8,7 +8,7 @@ from datetime import datetime # tracks the time someone submits a CME so we can 
 
 import streamlit as st # the website we using for the cme submissions
 import base64 # dis is how we upload photos and pdfs for THCME!
-GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyE8-HIyXG1YAmOLgjPmq_4tKZ9vsaq2D9YX7mHqfq24e2RdksrtrIZxWeuZjf8tBdr/exec"
+GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuvwLHBo6a_1ZVC3KZvHnZ_wBoyj2Yv5hEfLyx8ShoflEfORT_QScq7bG6OziPwxAD/exec"
 # these are the lists that contain all of us as strings (so you can choose dif people for sits)
 RUNNING_SIT_WHO = ["LINDA EFROOMBA", "suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 # i should put these in alphabetical order but i am a lazy chud
