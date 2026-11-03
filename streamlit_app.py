@@ -326,10 +326,7 @@ MUST_SEES = { #this is dictionary 1
             "Consideration of Final Transport/Justification of Transport Decided",
         ],
         "Vital MUST-SEES": [
-            "Skin (did they FEEL the skin for a temperature?)",
             "SpO2%",
-            "Resp Rate",
-            "Pulse",
         ],
     },
 	"Optional/Skills CME": {
