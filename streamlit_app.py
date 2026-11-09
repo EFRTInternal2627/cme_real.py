@@ -18,10 +18,10 @@ SIT_OPTIONS = ["OCME", "MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
 #this is something i think is really important! having a clear goal means better quality cmes
 # it also means people won't submit unless they're sure the responders improved/learned something from da sit! i hope!
 GOAL_OPTIONS = [
-    "yes! sit was understood, no further action needed.",
-    "we practiced LOQ, then the sit was understood!",
-    "we practiced some vitals, then the sit was understood!",
-    "we did a stop-and-go sit, then the sit was understood!",
+    "YES! Sit was understood, no further action needed.",
+    "We practiced LOQ, then the sit was understood!",
+    "We practiced some vitals, then the sit was understood!",
+    "We did a stop-and-go sit, then the sit was understood!",
 ]
 
 PACK_CHECK_OPTIONS = [
@@ -555,11 +555,11 @@ def prepare_uploaded_files(uploaded_files):
 
     return prepared_files
 	
-st.title("cme submission form")
+st.title("EFRT Cme Submission Form, 2026/2027")
 
-st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training). If you are submitting a CME and have already reached your maximum 2 for credit, please put down LINDA EFROOMBA as the Responder running the sit!")
+st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training). *If you are submitting a CME and have already reached your maximum 2 for credit, please put down LINDA EFROOMBA as the Responder running the sit!*")
 
-st.subheader("happy training everyone! #nocarryovers")
+st.subheader("Happy training everyone! #nocarryovers")
 # -----------------------------
 # STOPWATCH STATE
 # -----------------------------
@@ -719,7 +719,7 @@ with timer_col3:
         st.rerun()
 
 
-st.markdown("#### 📍 add timestamps from your sit here if you'd like!")
+st.markdown("#### 📍 Add timestamps from your sit here if you'd like!")
 
 
 timestamp_note = st.text_input(
@@ -778,7 +778,7 @@ additional_must_sees = st.text_input(
 )
 
 goal1 = st.text_area(
-    "what was the goal of your sit that you wanted to achieve?"
+    "What was the goal of your sit that you wanted to achieve?"
 )
 
 goal = st.radio(
@@ -789,7 +789,7 @@ goal = st.radio(
 
 
 general_feedback = st.text_area(
-    "general feedback for your responder!"
+    "General feedback for your responder!"
 )
 st.write (
 	"Please make sure the inside of our training packs stay tidy! Or else... **THEY** might get you.",
