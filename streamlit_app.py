@@ -334,7 +334,7 @@ MUST_SEES = { #this is dictionary 1
 			"Assessment MUST-SEES": [
 				"Skill practiced and understood!",
 		]
-	}
+	},
 	"Optional CME": {
 			"Assessment MUST-SEES": [
 				"Skill practiced and understood!",
@@ -532,7 +532,7 @@ def format_stopwatch(seconds):
 st.set_page_config(
     page_title="CME Submission Form (26'/27')",
     page_icon="🚑", #ehehehehe got to be swagged up
-	layout="wide",
+	layout="centered",
 	initial_sidebar_state="collapsed",
 )
 st.image(
