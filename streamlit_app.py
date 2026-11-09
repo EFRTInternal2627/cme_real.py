@@ -103,7 +103,8 @@ MUST_SEES = { #this is dictionary 1
             "OPQRST",
             "Full Abdo LOQ",
             "Localized physical exam of abdomen (observation + palpation)",
-            "Administration of Sx Relief if indicated",
+            "Administration of Sx Relief (epi, zofran, tylenol, advil, etc.) if indicated",
+			"Correct adminstration of Sx relief",
             "Transfer Pad with USEFUL STUFF ON IT",
             "Correct Radio Codes! For Everything!",
             "Consideration of Final Transport/Justification of Transport Decided",
@@ -329,11 +330,17 @@ MUST_SEES = { #this is dictionary 1
             "SpO2%",
         ],
     },
-	"Optional/Skills CME": {
+	"Skills CME": {
 			"Assessment MUST-SEES": [
 				"Skill practiced and understood!",
 		]
 	}
+	"Optional CME": {
+			"Assessment MUST-SEES": [
+				"Skill practiced and understood!",
+		]
+	}
+	
 }
 
 
