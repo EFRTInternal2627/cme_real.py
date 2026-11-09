@@ -557,7 +557,7 @@ def prepare_uploaded_files(uploaded_files):
 	
 st.title("EFRT Cme Submission Form, 2026/2027")
 
-st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training). *If you are submitting a CME and have already reached your maximum 2 for credit, please put down LINDA EFROOMBA as the Responder running the sit!*")
+st.caption ("Each month, each responder is required to complete the CMEs outlined in the monthly training update. All CMEs are due by the last day of the month @23:59, with the exception of THCMEs (due before monthly training). **If you are submitting a CME and have already reached your maximum 2 for credit, please put down LINDA EFROOMBA as the Responder running the sit!**")
 
 st.subheader("Happy training everyone! #nocarryovers")
 # -----------------------------
