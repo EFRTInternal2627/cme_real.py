@@ -14,7 +14,7 @@ RUNNING_SIT_WHO = ["LINDA EFROOMBA", "suhani verma", "isaac wasti", "renee fries
 # i should put these in alphabetical order but i am a lazy chud
 CREDIT_SIT_WHO = ["LINDA EFROOMBA", "isaac wasti", "renee friesen", "mariana ren", "alex tian", "matthew kim", "meagen huynh", "belinda zhao", "ethan lee", "rachel kang", "chloe law", "roger zhang", "morgan ter stege", "sophia zhang", "jigisha sekhon", "rafaii goonaratne", "suhani verma", "jennifer francis", "isra bashir", "amanda chow", "shannon man", "leena han", "otis weeks", "jioh yi", "grace lu", "andrew adamson", "evan zhao", "tiya patel", "kira young", "graham dinniwell", "bodhi mah", "murad ammar", "caroline bazydlo", "olivia lee", "katherine lewis", "shanza imran", "melanie seymour", "david litvinenko", "aiden yoo", "vivian ye", "aydin yung", "jenna chen", "henry holland", "henry ball", "trisha arora"]
 
-SIT_OPTIONS = ["OCME", "MCME#1", "MCME#2", "MCME#3", "MCEM#4", "THCME"]
+SIT_OPTIONS = ["OCME", "MCME#1", "MCME#2", "MCME#3", "MCME#4", "THCME"]
 #this is something i think is really important! having a clear goal means better quality cmes
 # it also means people won't submit unless they're sure the responders improved/learned something from da sit! i hope!
 GOAL_OPTIONS = [
